@@ -119,9 +119,9 @@ fn main() {
         Ok(()) => println!("Operation Successful, finished in {:#?}", elapsed),
         Err(e) => {
             eprintln!("Failed to complete operation: {}", e);
-
             // Remove Empty Output File
             remove_file(output_path).unwrap();
+            exit(1);
         }
     }
 }
@@ -143,7 +143,6 @@ fn is_encrypted(input: &mut File) -> bool {
 fn derive_key(password: &str, salt: &Salt) -> Key {
     let mut key = Key([0; KEYBYTES]);
     let Key(ref mut kb) = key;
-    //
     pwhash::derive_key(kb, &password.as_bytes(), &salt,
                        OPSLIMIT_INTERACTIVE,
                        MEMLIMIT_INTERACTIVE).unwrap();
