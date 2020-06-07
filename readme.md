@@ -28,5 +28,5 @@ $ cargo build --release
 
 ### Future Work
 - Folder Encryption
-- Compression
+- Compression (Work in progress)
 - Progress Bar and percentage status    
