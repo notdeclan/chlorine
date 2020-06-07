@@ -148,7 +148,9 @@ fn main() {
 }
 
 fn is_encrypted(input: &mut File) -> bool {
-    let file_size = input.metadata().unwrap().len();
+    let file_size = input.metadata()
+        .expect("Failed to get file metadata")
+        .len();
 
     if file_size < (MAGIC_BYTES.len() + SALTBYTES + HEADERBYTES) as u64 {
         return false;
@@ -156,7 +158,8 @@ fn is_encrypted(input: &mut File) -> bool {
 
     // Check Magic Number
     let mut magic_number = [0u8; MAGIC_BYTES.len()];
-    input.read_exact(&mut magic_number).unwrap();
+    input.read_exact(&mut magic_number)
+        .expect("Failed to read magic number");
 
     return magic_number == MAGIC_BYTES;
 }
@@ -173,7 +176,8 @@ fn derive_key(password: &str, salt: &Salt, sensitive: bool) -> Key {
 
     pwhash::derive_key(kb, &password.as_bytes(), &salt,
                        ops,
-                       mem).unwrap();
+                       mem)
+        .expect("Failed to derive key");
 
     return key;
 }
@@ -205,7 +209,7 @@ fn encrypt(input: &mut File, output: &mut File, password: &str, sensitive: bool,
     // Write Header
     output.write(&header.0)?;
 
-    let mut bytes_left = input.metadata().unwrap().len();
+    let mut bytes_left = input.metadata()?.len();
     let mut buffer = [0; CHUNK_SIZE];
 
     // Initialize Compression
@@ -248,13 +252,13 @@ fn decrypt(input: &mut File,  output: &mut File, password: &str, sensitive: bool
 
     // Extract Salt
     let mut salt = [0u8; SALTBYTES];
-    input.read_exact(&mut salt).unwrap();
+    input.read_exact(&mut salt)?;
 
     let salt = Salt(salt);
 
     // Extract Header
     let mut header = [0u8; HEADERBYTES];
-    input.read_exact(&mut header).unwrap();
+    input.read_exact(&mut header)?;
 
     let header = Header(header);
 
@@ -264,7 +268,8 @@ fn decrypt(input: &mut File,  output: &mut File, password: &str, sensitive: bool
     println!("Derived Encryption Key");
 
     // Initialize Decryption Stream
-    let mut stream = Stream::init_pull(&header, &key).unwrap();
+    let mut stream = Stream::init_pull(&header, &key)
+        .map_err(|_| EncryptionError::new("Failed to initialize decryption stream"))?;
 
     // The cipher text length is guaranteed to always be message length + ABYTES.
     let mut buffer = [0u8; CHUNK_SIZE + ABYTES];
