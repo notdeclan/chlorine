@@ -48,7 +48,7 @@ impl Error for EncryptionError { }
 fn main() {
     // CLAP Command Line Interface
     let matches = App::new("chlorine")
-        .version("1.1.0")
+        .version("1.2.0")
         .about("Simple and fast password based file encryption")
         .author("Declan W <1701185@uad.ac.uk>")
         //Required Arguments

@@ -1,6 +1,6 @@
 [package]
 name = "chlorine"
-version = "1.1.0"
+version = "1.2.0"
 authors = ["Declan W <1701185@abertay.ac.uk>"]
 edition = "2018"
 
