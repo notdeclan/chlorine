@@ -12,7 +12,7 @@ Files are encrypted using **ChaCha20** with a **Poly1305 MAC**, upon encrypting 
 cipher text.
 
 #### Key Derivation
-Key's are derived from the user supplied password a particular combination of **Scrypt**, **Salsa20/8** and **SHA-256**
+Key's are derived from the user supplied password using a particular combination of **Scrypt**, **Salsa20/8** and **SHA-256**
 
 Releases
 ---
