@@ -1,0 +1,10 @@
+[package]
+name = "chlorine"
+version = "1.1.0"
+authors = ["Declan W <1701185@abertay.ac.uk>"]
+edition = "2018"
+
+[dependencies]
+sodiumoxide = "0.2.5"
+clap = "2.33.1"
+rpassword = "4.0.5"
